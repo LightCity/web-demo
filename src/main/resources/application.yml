@@ -6,3 +6,11 @@ management:
     web:
       exposure:
         include: '*'
+
+spring:
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 55000
+    password: redispw
+    timeout: 60000

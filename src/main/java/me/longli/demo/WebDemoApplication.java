@@ -10,14 +10,20 @@ import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
 import me.longli.demo.nettytest.EchoServerHandler;
-import org.springframework.beans.BeansException;
+import me.longli.demo.state_machine.MyOrderEvent;
+import me.longli.demo.state_machine.MyOrderState;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+//import org.springframework.beans.BeansException;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ConfigurableApplicationContext;
+//import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.statemachine.StateMachine;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -26,9 +32,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @SpringBootApplication
-public class WebDemoApplication {
+public class WebDemoApplication implements CommandLineRunner{
 
     public static ApplicationEventPublisher publisher;
+
+    @Autowired
+    private StateMachine<MyOrderState, MyOrderEvent> orderMachine;
 
     public static void main(String[] args) throws InterruptedException {
         publisher = SpringApplication.run(WebDemoApplication.class, args);
@@ -48,7 +57,7 @@ public class WebDemoApplication {
             b.group(bossGroup)
                     .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(9999))
-                    .childHandler(new ChannelInitializer() {
+                    .childHandler(new ChannelInitializer<>() {
                         @Override
                         protected void initChannel(Channel ch) throws Exception {
                             ch.pipeline().addLast(new EchoServerHandler());
@@ -106,5 +115,11 @@ public class WebDemoApplication {
                         future.isSuccess());
             }
         });
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        orderMachine.sendEvent(MyOrderEvent.addToCart);
+        orderMachine.sendEvent(MyOrderEvent.pay);
     }
 }

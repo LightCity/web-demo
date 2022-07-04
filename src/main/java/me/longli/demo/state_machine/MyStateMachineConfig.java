@@ -1,12 +1,16 @@
 package me.longli.demo.state_machine;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.*;
+import org.springframework.statemachine.listener.StateMachineListener;
+import org.springframework.statemachine.listener.StateMachineListenerAdapter;
+import org.springframework.statemachine.state.State;
 
 @Configuration
-@EnableStateMachine
+@EnableStateMachine(name = "orderMachine")
 public class MyStateMachineConfig extends EnumStateMachineConfigurerAdapter<MyOrderState, MyOrderEvent> {
 
 //    @Override
@@ -14,23 +18,44 @@ public class MyStateMachineConfig extends EnumStateMachineConfigurerAdapter<MyOr
 //        super.configure(config);
 //    }
 
-    @Override
-    public void configure(StateMachineModelConfigurer<MyOrderState, MyOrderEvent> model) throws Exception {
-        super.configure(model);
+    @Bean
+    public StateMachineListener<MyOrderState, MyOrderEvent> listener() {
+        return new StateMachineListenerAdapter<MyOrderState, MyOrderEvent>() {
+            @Override
+            public void stateChanged(State<MyOrderState, MyOrderEvent> from, State<MyOrderState, MyOrderEvent> to) {
+                System.out.println("State change to " + to.getId());
+            }
+        };
     }
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<MyOrderState, MyOrderEvent> config) throws Exception {
-        super.configure(config);
+        config
+            .withConfiguration()
+                .autoStartup(true)
+                .listener(listener());
     }
 
     @Override
     public void configure(StateMachineStateConfigurer<MyOrderState, MyOrderEvent> states) throws Exception {
-        super.configure(states);
+        states
+            .withStates()
+                .initial(MyOrderState.init)
+                    .states(java.util.EnumSet.allOf(MyOrderState.class));
     }
 
     @Override
     public void configure(StateMachineTransitionConfigurer<MyOrderState, MyOrderEvent> transitions) throws Exception {
-        super.configure(transitions);
+        transitions
+            .withExternal()
+                .source(MyOrderState.init).target(MyOrderState.paidOff).event(MyOrderEvent.pay)
+                .and()
+            .withExternal()
+                .source(MyOrderState.init).target(MyOrderState.refund).event(MyOrderEvent.cancel);
+    }
+
+    @Override
+    public void configure(StateMachineModelConfigurer<MyOrderState, MyOrderEvent> model) throws Exception {
+        super.configure(model);
     }
 }
