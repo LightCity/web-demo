@@ -1,0 +1,8 @@
+server:
+  port: 19999
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
