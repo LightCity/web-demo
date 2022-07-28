@@ -2,12 +2,16 @@ package me.longli.demo.state_machine;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.*;
+import org.springframework.statemachine.guard.Guard;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
+
+import java.time.LocalDate;
 
 @Configuration
 @EnableStateMachine(name = "orderMachine")
@@ -41,17 +45,62 @@ public class MyStateMachineConfig extends EnumStateMachineConfigurerAdapter<MyOr
         states
             .withStates()
                 .initial(MyOrderState.init)
-                    .states(java.util.EnumSet.allOf(MyOrderState.class));
+                .states(java.util.EnumSet.allOf(MyOrderState.class));
     }
 
     @Override
     public void configure(StateMachineTransitionConfigurer<MyOrderState, MyOrderEvent> transitions) throws Exception {
         transitions
             .withExternal()
-                .source(MyOrderState.init).target(MyOrderState.paidOff).event(MyOrderEvent.pay)
+                .source(MyOrderState.init)
+                .target(MyOrderState.created)
+                .event(MyOrderEvent.placeOrder)
                 .and()
             .withExternal()
-                .source(MyOrderState.init).target(MyOrderState.refund).event(MyOrderEvent.cancel);
+                // 从已创建订单，到部分付款
+                .source(MyOrderState.created)
+                .target(MyOrderState.partialPaid)
+                .event(MyOrderEvent.pay)
+                .guard(new Guard<MyOrderState, MyOrderEvent>() {
+                    @Override
+                    public boolean evaluate(StateContext<MyOrderState, MyOrderEvent> context) {
+                        return true;
+                    }
+                })
+                .and()
+            .withInternal()
+                // 从部分付款，到部分付款
+                .source(MyOrderState.partialPaid)
+                .event(MyOrderEvent.pay)
+                .guard(new Guard<MyOrderState, MyOrderEvent>() {
+                    @Override
+                    public boolean evaluate(StateContext<MyOrderState, MyOrderEvent> context) {
+                        return true;
+                    }
+                })
+                .and()
+            .withExternal()
+                // 从已创建订单，到全部付款
+                .source(MyOrderState.created)
+                .target(MyOrderState.paidOff)
+                .event(MyOrderEvent.pay)
+                .guard(new Guard<MyOrderState, MyOrderEvent>() {
+                    @Override
+                    public boolean evaluate(StateContext<MyOrderState, MyOrderEvent> context) {
+                        return true;
+                    }
+                })
+                .and()
+            .withExternal()
+                .source(MyOrderState.created)
+                .target(MyOrderState.canceled)
+                .event(MyOrderEvent.cancelOrder)
+                .and()
+            .withExternal()
+                .source(MyOrderState.paidOff)
+                .target(MyOrderState.refund)
+                .event(MyOrderEvent.applyRefund)
+        ;
     }
 
     @Override

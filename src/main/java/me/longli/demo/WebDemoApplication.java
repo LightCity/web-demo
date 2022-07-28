@@ -120,6 +120,8 @@ public class WebDemoApplication implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
         orderMachine.sendEvent(MyOrderEvent.addToCart);
+        orderMachine.sendEvent(MyOrderEvent.placeOrder);
+        orderMachine.sendEvent(MyOrderEvent.pay);
         orderMachine.sendEvent(MyOrderEvent.pay);
     }
 }
