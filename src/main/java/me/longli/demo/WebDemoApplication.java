@@ -15,14 +15,11 @@ import me.longli.demo.state_machine.MyOrderState;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-//import org.springframework.beans.BeansException;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.context.ApplicationContext;
-//import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEventPublisher;
-//import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.statemachine.StateMachine;
 
 import java.net.InetSocketAddress;
@@ -30,6 +27,7 @@ import java.net.SocketAddress;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@EnableRetry
 @Slf4j
 @SpringBootApplication
 public class WebDemoApplication implements CommandLineRunner{
@@ -117,6 +115,7 @@ public class WebDemoApplication implements CommandLineRunner{
         });
     }
 
+    @Retryable
     @Override
     public void run(String... args) throws Exception {
         orderMachine.sendEvent(MyOrderEvent.addToCart);
