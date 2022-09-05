@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.statemachine.StateMachine;
 
 import java.net.InetSocketAddress;
@@ -28,6 +29,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @EnableRetry
+@EnableAsync
 @Slf4j
 @SpringBootApplication
 public class WebDemoApplication implements CommandLineRunner{

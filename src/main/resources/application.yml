@@ -10,6 +10,8 @@ management:
         include: '*'
 
 spring:
+  main:
+    allow-circular-references: true # springboot-2.6 开始默认禁止循环依赖，需手动开启
   redis:
     database: 0
     host: 127.0.0.1
