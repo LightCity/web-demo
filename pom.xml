@@ -246,6 +246,45 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>9.3.0</version>
+                <configuration>
+                    <driver>com.mysql.cj.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost:3306/test</url>
+                    <user>longli</user>
+                    <password>123456</password>
+                    <schemas>
+                        <schema>test</schema>
+                    </schemas>
+                    <locations>
+                        <location>classpath:flywaysql/*.sql</location>
+                    </locations>
+<!--                    <placeholders>-->
+<!--                        <keyABC>valueXYZ</keyABC>-->
+<!--                        <otherplaceholder>value123</otherplaceholder>-->
+<!--                    </placeholders>-->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-mysql</artifactId>
+                        <version>9.3.0</version>
+                    </dependency>
+                </dependencies>
+<!--                <configuration>-->
+<!--                    <url>jdbc:h2:file:./target/foobar</url>-->
+<!--                    <user>sa</user>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>com.h2database</groupId>-->
+<!--                        <artifactId>h2</artifactId>-->
+<!--                        <version>1.4.197</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+            </plugin>
         </plugins>
     </build>
 
