@@ -13,6 +13,7 @@ public class ServiceBImpl implements ServiceB {
     @Async
     @Override
     public CompletableFuture<String> sayB() {
+        System.out.println("ServiceBImpl#sayB() 被调用");
         return CompletableFuture.completedFuture("ServiceBImpl");
     }
 }
