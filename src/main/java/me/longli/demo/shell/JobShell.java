@@ -3,6 +3,7 @@ package me.longli.demo.shell;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.longli.demo.aoptest.service.ServiceB;
 import me.longli.demo.service.HelloService;
+import me.longli.demo.service.TimeShower;
 import org.jobrunr.jobs.JobId;
 import org.jobrunr.scheduling.JobScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +52,18 @@ public class JobShell {
     public String sayHello(
             @ShellOption(value = { "--name" }) String name) {
         JobId id = jobScheduler.enqueue(() -> {
+            System.out.println("sayHello <-----------");
             ServiceB serviceB = (ServiceB) applicationContext.getBean("serviceBImpl");
             serviceB.sayB();
             helloService.sayHello(name);
         });
         return id.toString();
+    }
+
+    @ShellMethod(value = "logTime", key = "logTime")
+    public String logTime(String cron) {
+        return jobScheduler.scheduleRecurrently(cron, () -> {
+            helloService.showTime();
+        });
     }
 }
