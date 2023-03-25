@@ -197,7 +197,7 @@
             <version>1.18.20</version>
             <scope>compile</scope>
         </dependency>
-<!--        <dependency>-->
+∆<!--        <dependency>-->
 <!--            <groupId>com.google.code.gson</groupId>-->
 <!--            <artifactId>gson</artifactId>-->
 <!--            <version>2.9.0</version>-->
