@@ -1,9 +1,15 @@
 package me.longli.demo.jpa.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import me.longli.demo.jpa.entity.converter.QualityLevelConverter;
 import me.longli.demo.jpa.entity.sub.QualityLevelEnum;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

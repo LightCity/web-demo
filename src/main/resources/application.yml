@@ -12,37 +12,41 @@ management:
 spring:
   main:
     allow-circular-references: true # springboot-2.6 开始默认禁止循环依赖，需手动开启
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password: redispw
-    timeout: 60000
+  data:
+    redis:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password: test
+      timeout: 60000
   datasource:
     url: jdbc:mysql://localhost:3306/test?autoReconnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: longli
     password: 123456
-    druid:
-      # Druid 数据源配置，继承spring.datasource.* 配置，相同则覆盖
-      initial-size: 2
-      max-active: 30
-      min-idle: 2
-      max-wait: 1234
-      pool-prepared-statements: true
-      max-pool-prepared-statement-per-connection-size: 5
-      # spring.datasource.druid.max-open-prepared-statements= #等价于上面的max-pool-prepared-statement-per-connection-size
-      validation-query: select 1
-      validation-query-timeout: 1
-      test-on-borrow: true
-      test-on-return: true
-      test-while-idle: true
-      time-between-eviction-runs-millis: 10000
-      min-evictable-idle-time-millis: 30001
-      async-close-connection-enable: true
-      filters: stat
-  flyway:
-    enabled: false
+#  batch:
+#    job:
+#      enabled: false
+#    druid:
+#      # Druid 数据源配置，继承spring.datasource.* 配置，相同则覆盖
+#      initial-size: 2
+#      max-active: 30
+#      min-idle: 2
+#      max-wait: 1234
+#      pool-prepared-statements: true
+#      max-pool-prepared-statement-per-connection-size: 5
+#      # spring.datasource.druid.max-open-prepared-statements= #等价于上面的max-pool-prepared-statement-per-connection-size
+#      validation-query: select 1
+#      validation-query-timeout: 1
+#      test-on-borrow: true
+#      test-on-return: true
+#      test-while-idle: true
+#      time-between-eviction-runs-millis: 10000
+#      min-evictable-idle-time-millis: 30001
+#      async-close-connection-enable: true
+#      filters: stat
+#  flyway:
+#    enabled: false
 
 debug: on
 
