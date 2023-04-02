@@ -50,3 +50,8 @@ spring:
 
 debug: on
 
+org:
+  jobrunr:
+    database:
+      skip-create: false
+
