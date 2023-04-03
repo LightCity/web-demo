@@ -27,7 +27,7 @@ public class EchoServer {
             ServerBootstrap b3 = b.localAddress(port); // 指定端口
             ServerBootstrap b4 = b.childHandler(new ChannelInitializer<>() { // 将channelHandler添加到channelPipeline // TODO 与 b.childHandler(new EchoServerHandler()); 的区别在哪？
                 @Override
-                protected void initChannel(Channel ch) throws Exception {
+                protected void initChannel(Channel ch) throws Exception { // 每次接到新的连接，都会执行到这里。// ChannelInitializer 更像是一个 ChannelHandler 的延迟初始化器？
                     ChannelPipeline pipeline = ch.pipeline();
                     pipeline.addLast(myHandler);
                 }
