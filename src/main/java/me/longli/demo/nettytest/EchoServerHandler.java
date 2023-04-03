@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
@@ -12,6 +13,7 @@ import me.longli.demo.event.MyEvent;
 
 import java.time.LocalDateTime;
 
+@ChannelHandler.Sharable
 public class EchoServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
@@ -20,7 +22,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("服务端接收到消息：" + in.toString(CharsetUtil.UTF_8));
         ctx.write(in); // 将消息发送回对方
 
-        WebDemoApplication.publisher.publishEvent(new MyEvent(this, "channelRead", LocalDateTime.now()));
+        //WebDemoApplication.publisher.publishEvent(new MyEvent(this, "channelRead", LocalDateTime.now()));
     }
 
     @Override
@@ -28,7 +30,7 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         ChannelFuture channelFuture = ctx.writeAndFlush(Unpooled.EMPTY_BUFFER);// 将未决消息冲刷到远程节点
         channelFuture.addListener(ChannelFutureListener.CLOSE); // 并且关闭该Channel
 
-        WebDemoApplication.publisher.publishEvent(new MyEvent(this, "channelReadComplete", LocalDateTime.now()));
+        //WebDemoApplication.publisher.publishEvent(new MyEvent(this, "channelReadComplete", LocalDateTime.now()));
     }
 
     @Override
@@ -36,6 +38,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close(); // 关闭该channel
 
-        WebDemoApplication.publisher.publishEvent(new MyEvent(this, "exceptionCaught", LocalDateTime.now()));
+        //WebDemoApplication.publisher.publishEvent(new MyEvent(this, "exceptionCaught", LocalDateTime.now()));
     }
 }

@@ -4,6 +4,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -27,7 +28,8 @@ public class EchoServer {
             ServerBootstrap b4 = b.childHandler(new ChannelInitializer<>() { // 将channelHandler添加到channelPipeline // TODO 与 b.childHandler(new EchoServerHandler()); 的区别在哪？
                 @Override
                 protected void initChannel(Channel ch) throws Exception {
-                    ch.pipeline().addLast(myHandler);
+                    ChannelPipeline pipeline = ch.pipeline();
+                    pipeline.addLast(myHandler);
                 }
             });
             ChannelFuture bindFuture = b.bind(); // 异步地绑定服务器
