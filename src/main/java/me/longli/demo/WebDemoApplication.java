@@ -9,7 +9,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import lombok.extern.slf4j.Slf4j;
-import me.longli.demo.nettytest.EchoServerHandler;
+import me.longli.demo.nettytest.EchoServerInboundHandler;
 import me.longli.demo.state_machine.MyOrderEvent;
 import me.longli.demo.state_machine.MyOrderState;
 
@@ -60,7 +60,7 @@ public class WebDemoApplication implements CommandLineRunner{
                     .childHandler(new ChannelInitializer<>() {
                         @Override
                         protected void initChannel(Channel ch) throws Exception {
-                            ch.pipeline().addLast(new EchoServerHandler());
+                            ch.pipeline().addLast(new EchoServerInboundHandler());
                             // 每隔30秒，检查是否读空闲，并发送事件
                             ch.pipeline().addLast(defaultEventExecutorGroup, new IdleStateHandler(30, 0, 0));
                             ch.pipeline().addLast(defaultEventExecutorGroup, new ChannelInboundHandlerAdapter() {
