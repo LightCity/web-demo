@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>web-demo</name>
     <description>Demo project for Spring Boot</description>
+
     <properties>
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
@@ -21,8 +22,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-statemachine.version>3.2.0</spring-statemachine.version>
     </properties>
-    <dependencies>
 
+    <dependencies>
         <dependency>
             <groupId>org.springframework.shell</groupId>
             <artifactId>spring-shell-starter</artifactId>
@@ -166,7 +167,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>6.0.6</version>
+            <!-- <version>6.0.6</version>-->
         </dependency>
         <dependency>
             <groupId>org.jobrunr</groupId>
