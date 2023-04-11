@@ -19,16 +19,18 @@ public class EchoServer {
 
     public void start() throws InterruptedException {
         final EchoServerInboundHandler myHandler = new EchoServerInboundHandler();
-        final EventLoopGroup group = new NioEventLoopGroup();
+        final EventLoopGroup parentGroup = new NioEventLoopGroup();
+        final EventLoopGroup childGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
-            ServerBootstrap b1 = b.group(group);
+            ServerBootstrap b1 = b.group(parentGroup, childGroup);
             ServerBootstrap b2 = b.channel(NioServerSocketChannel.class); // 指定使用NIO传输channel
             ServerBootstrap b3 = b.localAddress(port); // 指定端口
             ServerBootstrap b4 = b.childHandler(new ChannelInitializer<>() { // 将channelHandler添加到channelPipeline // TODO 与 b.childHandler(new EchoServerHandler()); 的区别在哪？
                 @Override
                 protected void initChannel(Channel ch) throws Exception { // 每次接到新的连接，都会执行到这里。// ChannelInitializer 更像是一个 ChannelHandler 的延迟初始化器？
                     ChannelPipeline pipeline = ch.pipeline();
+                    pipeline.addLast(new AgentInboundHandler());
                     pipeline.addLast(myHandler);
                 }
             });
@@ -41,8 +43,10 @@ public class EchoServer {
 
             System.out.println("EchoServer end. b=" + (b==b1 && b1==b2 && b2==b3 && b3==b4));
         } finally {
-            Future<?> shutdownFuture = group.shutdownGracefully();
-            shutdownFuture.sync();
+            Future<?> shutdownFuture1 = parentGroup.shutdownGracefully();
+            Future<?> shutdownFuture2 = childGroup.shutdownGracefully();
+            shutdownFuture1.sync();
+            shutdownFuture2.sync();
         }
     }
 
