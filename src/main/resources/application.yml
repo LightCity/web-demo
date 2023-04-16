@@ -8,10 +8,11 @@ management:
     web:
       exposure:
         include: '*'
-
 spring:
   main:
     allow-circular-references: true # springboot-2.6 开始默认禁止循环依赖，需手动开启
+  config:
+    import: "mybatis.yml"
   data:
     redis:
       database: 0

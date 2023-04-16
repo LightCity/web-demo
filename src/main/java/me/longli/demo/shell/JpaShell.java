@@ -3,6 +3,8 @@ package me.longli.demo.shell;
 import me.longli.demo.jpa.entity.Tb1;
 import me.longli.demo.jpa.entity.sub.QualityLevelEnum;
 import me.longli.demo.jpa.repository.Tb1Repository;
+import me.longli.demo.mybatis.dataobject.Tb1DO;
+import me.longli.demo.mybatis.mapper.Tb1Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
@@ -21,12 +23,22 @@ public class JpaShell {
     @Autowired
     private Tb1Repository tb1Repository;
 
+    @Autowired
+    private Tb1Mapper tb1Mapper;
+
     @ShellMethod(value = "getById", key = "fuck")
     // @ShellMethodAvailability("xxoo")
     public String getById(
             @ShellOption(value = { "--idValue" }) @Min(1L) @Max(10L) Long id) {
         Optional<Tb1> optEntity = tb1Repository.findById(id);
         return optEntity.map(Tb1::toString).orElse("null");
+    }
+
+    @ShellMethod(value = "getByIdV2", key = "fuck-mybatis")
+    public Tb1DO getByIdV2(
+            @ShellOption(value = { "--idValue" }) @Min(1L) @Max(10L) Integer id) {
+        Tb1DO bean = tb1Mapper.getById(id);
+        return bean;
     }
 
     @ShellMethod(value = "save")

@@ -1,0 +1,4 @@
+mybatis:
+  type-handlers-package: me.longli.demo.mybatis.type_handler
+  configuration:
+    map-underscore-to-camel-case: true
