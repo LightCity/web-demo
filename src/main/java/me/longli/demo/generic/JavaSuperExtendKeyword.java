@@ -37,8 +37,7 @@ public class JavaSuperExtendKeyword {
 //        System.out.println("t3=" + t3.getName());
     }
 
-    private static Class<?> find0(
-            final Object object, Class<?> parametrizedSuperclass, String typeParamName) {
+    private static Class<?> find0(final Object object, Class<?> parametrizedSuperclass, String typeParamName) {
 
         final Class<?> thisClass = object.getClass();
         Class<?> currentClass = thisClass;
