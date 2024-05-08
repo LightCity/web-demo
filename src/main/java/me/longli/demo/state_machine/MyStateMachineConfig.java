@@ -11,8 +11,6 @@ import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 
-import java.time.LocalDate;
-
 @Configuration
 @EnableStateMachine(name = "orderMachine")
 public class MyStateMachineConfig extends EnumStateMachineConfigurerAdapter<MyOrderState, MyOrderEvent> {
