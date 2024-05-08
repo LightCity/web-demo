@@ -1,4 +1,4 @@
 # Enable auto-env through the sdkman_auto_env config
 # Add key=value pairs of SDKs to use below
 # java=8.0.362-amzn
-java=17.0.7-openjdk
+java=openjdk-21.0.2
